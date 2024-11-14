@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-700 to-blue-500 text-white">
+
+    <div class="text-center space-y-8">
+        <h1 class="text-4xl font-bold">Bienvenido a la página de administración</h1>
+
+        <% if (user) { %>
+            <p class="text-lg">Usuario: <%= user.name %> <%= user.lastName%> . Tu rol es: <%= user.role %>.</p>
+        <% }%>
+
+        <div class="flex justify-center space-x-4">
+            <a href="/admin/usuarios"
+                class="px-6 py-3 bg-red-500 rounded-lg hover:bg-red-400 transition-colors duration-200 text-xl font-semibold">
+                Usuarios
+            </a>
+            <a href="/admin/productos"
+                class="px-6 py-3 bg-green-500 rounded-lg hover:bg-green-400 transition-colors duration-200 text-xl font-semibold">
+                Productos
+            </a>
+            <a href="/admin/categorias"
+                class="px-6 py-3 bg-blue-500 rounded-lg hover:bg-blue-400 transition-colors duration-200 text-xl font-semibold">
+                Categorías
+            </a>
+        </div>
+        <div class="flex justify-center mt-4">
+            <a href="/logout"
+                class="px-6 py-3 bg-pink-600 rounded-lg hover:bg-rose-400 transition-colors duration-200 text-xl font-semibold">
+                Cerrar Sesión
+            </a>
+        </div>
+    </div>
+
+</body>
+
+</html>

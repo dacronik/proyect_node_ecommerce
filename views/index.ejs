@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <title>Fav-tienda</title>
+</head>
+<body>
+    <style>
+        body {
+            background-image: url('img/fondo.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+        .swiper {
+            width: 1000px;
+            height: 230px;
+        }
+    </style>
+
+    <%- include('templates/nav') %>
+    
+    <!-- Carrusel -->
+    <div class="mt-12">
+        <div class="swiper">
+            <div class="swiper-wrapper"> 
+                <div class="swiper-slide">
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <img src="img/E-sport.png" alt="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <img src="img/consolas.png" alt="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="bg-white rounded-lg shadow-lg">
+                        <img src="img/banner.png" alt="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+            <!-- Botones de navegación (opcional) -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <!-- Paginación (opcional) -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <div class="container mx-auto p-4">
+        <% groupedProducts.forEach(group => { %>
+          <div class="mb-8">
+            <!-- Fila para la franja con el nombre de la categoría -->
+            <div class="bg-yellow-700 text-white text-xl font-semibold p-2 rounded-t">
+              <%= group.category %>
+            </div>
+            
+            <!-- Cards de productos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+              <% group.products.forEach(product => { %>
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                  <img src="/uploads/<%= product.imagen1 %>" alt="<%= product.name %>" class="w-full h-48 object-cover">
+                  <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2"><%= product.name %></h3>
+                    <p class="text-gray-600">$<%= product.price %> Pesos</p>
+                    <p class="text-gray-500"><%= product.description %></p>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+          
+            // If we need pagination
+            pagination: {
+              el: '.swiper-pagination',
+            },
+            autoplay: {
+                delay: 3000, // Tiempo en milisegundos antes de pasar a la siguiente imagen
+                disableOnInteraction: false, // El autoplay no se desactiva cuando el usuario interactúa
+            },
+          
+            // Navigation arrows
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+          
+            // And if we need scrollbar
+            scrollbar: {
+              el: '.swiper-scrollbar',
+            },
+          });
+    </script>
+    
+</body>
+</html>

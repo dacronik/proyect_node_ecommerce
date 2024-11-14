@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<body class="bg-gray-100">
+    
+    <div class="container mx-auto mt-10">
+        <div class="container mx-auto mt-10 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Botón Volver -->
+                <a href="/admin" class="flex items-center space-x-1 bg-purple-600 text-gray-200 hover:bg-purple-800 hover:text-white transition-colors duration-200 rounded-lg px-3 py-2">
+                    <!-- Icono de Casa -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 1.707a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    <span>Volver</span>
+                </a>
+                <!-- Título -->
+                <h1 class="text-2xl font-bold">Gestión de Categorías</h1>
+            </div>
+        </div>
+    
+        <!-- Botón para agregar categorias -->
+        <section class="flex justify-end mb-4">
+            <button id="addCategoryBtn" class="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Agregar Categoría
+            </button>
+        </section>
+    
+        <!-- section tabla de Categorias -->
+        <section class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 text-left">Nombre Categoria</th>
+                        <th class="py-2 px-4 text-left">Descripción</th>
+                        <th class="py-2 px-4 text-left">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody">
+                    <!-- Carga de categorías en la tabla -->
+                    <% categories.forEach((category) =>{ %>
+                        <tr>
+                            <td class="py-2 px4 border border-gray-300">
+                                <%= category.name %>
+                            </td>
+                            <td class="py-2 px4 border border-gray-300">
+                                <%= category.description %>
+                            </td>
+                            <td class="py-2 px-4 flex space-x-2">
+                                <!-- Botón de ver detalles -->
+                                <button class="bg-blue-500 text-white p-2 rounded" onclick="viewCategory('<%= category.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z"></path></svg>
+                                </button>
+    
+                                <!-- Botón de editar -->
+                                <button class="bg-yellow-500 text-white p-2 rounded" onclick="editCategory('<%= category.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5h4l2 2 5 5v7h-4l-6-6V9H5V5h6z"></path></svg>
+                                </button>
+    
+                                <!-- Botón de eliminar -->
+                                <button class="bg-red-500 text-white p-2 rounded" onclick="deleteCategory('<%= category.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M10 11v6m4-6v6m5 7H5a2 2 0 01-2-2V7h18v12a2 2 0 01-2 2z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        //función para agregar una categoria
+        document.getElementById('addCategoryBtn').addEventListener
+        ('click', () => {
+            Swal.fire({
+                title: 'Agregar Categoria',
+                html:`
+                    <input id="categoryName" class="swal2-input" placeholder="Nombre de la Categoría">
+                    <textarea id="categoryDescription" class="swal2-textarea" placeholder="Descripción"></textarea>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Agregar',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                preConfirm: () =>{
+                    const name = document.getElementById('categoryName').value;
+                    const description = document.getElementById('categoryDescription').value;
+                    //validación de nombre
+                    if(!name){
+                        Swal.fire('Error', 'Debes ingresar un nombre de categoría', 'error');
+                        return false;
+                    }
+                    return { name: name, description: description}
+                    
+                }
+            }).then((result) => {
+                //llamada a la API para agregar categoría
+                if (result.isConfirmed && result.value){
+                    fetch('/admin/categorias', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(result.value)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.error){
+                            Swal.fire('Error', data.error, 'error');
+                        }else {
+                            Swal.fire('Éxito', 'Categoría agregada exitosamente','success').then(() => {
+                                location.reload();
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', 'No se pudo agregar el producto', 'error');
+                    });
+                }
+            })
+        });
+        // Función para ver los detalles de la categoría
+        function viewCategory(id) {
+            fetch(`/admin/categorias/${id}`)
+                .then(response => response.json())
+                .then(category => {
+                    Swal.fire({
+                        title: 'Detalles de la categoría',
+                        html: `
+                            <p><strong>Nombre:</strong> ${category.name}</p>
+                            <p><strong>Descripción:</strong> ${category.description}</p>
+                        `,
+                        showCloseButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar el producto', 'error');
+                });
+        };
+        // Función para editar producto
+        function editCategory(id) {
+            fetch(`/admin/categorias/${id}`)
+                .then(response => response.json())
+                .then(category => {
+                    console.log(category);
+                    Swal.fire({
+                        title: 'Editar Categoría',
+                        html: `
+                            <input  id="categoryName" class="swal2-input" value="${category.name}" placeholder="Nombre de categoría">
+                            <textarea id="categoryDescription" class="swal2-textarea" placeholder="Descripción">${category.description}</textarea>
+                        `,
+                        confirmButtonText: 'Actualizar',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        
+                        preConfirm: () => {
+                            const name = document.getElementById('categoryName').value;
+                            const description = document.getElementById('categoryDescription').value;
+
+                            if (!name || !category) {
+                                Swal.showValidationMessage('Por favor completa todos los campos requeridos');
+                            }
+
+                            return { name, description };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value) {
+                            const formData = new FormData();
+                            formData.append('name', result.value.name);
+                            formData.append('description', result.value.description);
+
+                            fetch(`/admin/categorias/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(result.value)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    Swal.fire('Error', data.error, 'error');
+                                } else {
+                                    Swal.fire('Éxito', 'Categoría actualizada exitosamente', 'success').then(() => {
+                                        location.reload();
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                Swal.fire('Error', 'No se pudo actualizar la categoría', 'error');
+                            });
+                        }
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar la categoría', 'error');
+                });
+        };
+
+        // Función para eliminar una categoría
+        function deleteCategory(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/categorias/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            Swal.fire('Error', data.error, 'error');
+                        } else {
+                            Swal.fire('Éxito', 'Categoría eliminada exitosamente', 'success').then(() => {
+                                location.reload();
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', 'No se pudo eliminar la categoría', 'error');
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

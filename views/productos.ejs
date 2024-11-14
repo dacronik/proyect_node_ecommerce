@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <title>Dev-Toys - Productos</title>
+</head>
+<body>
+    <style>
+        body {
+            background-image: url('img/fondo.jpg');
+            
+        }
+        .swiper {
+            width: 1000px;
+            height: 230px;
+        }
+    </style>
+
+    <%- include('templates/nav') %>
+
+    <div class="flex">
+        <!-- Barra lateral -->
+        <aside class="w-0/4 p-4 bg-blue-600">
+            <label for="categorySelect" class="block text-lg font-bold mb-2">Filtrar por categoría</label>
+            <select id="categorySelect" class="w-full p-2 border rounded">
+                <option value="all">Todas las categorías</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.id %>"><%= category.name %></option>
+                <% }) %>
+            </select>
+        </aside>
+    
+        <!-- Contenido principal -->
+        <main class="w-3/4 p-4">
+            <div id="productsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <% products.forEach(product => { %>
+                    <div class="border rounded-lg shadow p-4">
+                        <img src="/uploads/<%= product.imagen1 %>" alt="<%= product.name %>" class="w-full h-48 object-cover mb-4">
+                        <h2 class="text-lg font-bold"><%= product.name %></h2>
+                        <p>Precio: $<%= product.price %></p>
+                        <p>Stock: <%= product.stock %></p>
+                        <p>Descripción: <%= product.description %></p>
+                    </div>
+                <% }) %>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Filtrado de productos por categoría
+        document.getElementById('categorySelect').addEventListener('change', function () {
+            const selectedCategoryId = this.value;
+             const allProducts = <%- JSON.stringify(products) %>; // Obtiene los productos desde el backend
+            const filteredProducts = selectedCategoryId === 'all' ? allProducts : allProducts.filter(product => product.categoryId === selectedCategoryId);
+    
+            // Renderiza dinámicamente los productos filtrados
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            filteredProducts.forEach(product => {
+                container.innerHTML += `
+                    <div class="border rounded-lg shadow p-4">
+                        <img src="/uploads/${product.imagen1}" alt="${product.name}" class="w-full h-48 object-cover mb-4">
+                        <h2 class="text-lg font-bold">${product.name}</h2>
+                        <p>Precio: $${product.price}</p>
+                        <p>Stock: ${product.stock}</p>
+                        <p>Descripción: ${product.description}</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<nav class="bg-blue-600 p-4 text-white">
+    <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center">
+            <img src="img/logo.png" alt="Logo Dev-Toys" width="80" height="80"/>
+            <a href="/" class="text-lg font-bold">Dev-Toys</a>
+        </div>
+        
+        <ul class="flex space-x-4">
+            <li><a href="/" class="hover:text-yellow-300">Inicio</a></li>
+            <li><a href="/productos" class="hover:text-yellow-300">Productos</a></li>
+            <li><a href="/about" class="hover:text-yellow-300">Nosotros</a></li>
+            <li><a href="/contact" class="hover:text-yellow-300">Contacto</a></li>
+        </ul>
+
+        <div>
+            <% if (typeof user !== 'undefined' && user) { %>
+                <span class="mr-4">Bienvenido, <%= user.name %> <%= user.lastName %></span>
+                <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Cerrar sesión</a>
+            <% } else { %>
+                <a href="/login" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2">Login</a>
+                <a href="/registro" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Register</a>
+            <% } %>
+        </div>
+    </div>
+</nav>

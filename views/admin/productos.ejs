@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+
+<body class="bg-gray-100 font-body">
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto mt-10">
+        <div class="container mx-auto mt-10 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Botón Volver -->
+                <a href="/admin"
+                    class="flex items-center space-x-1 bg-purple-600 text-gray-200 hover:bg-purple-800 hover:text-white transition-colors duration-200 rounded-lg px-3 py-2">
+                    <!-- Icono de Casa -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.707 1.707a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    <span>Volver</span>
+                </a>
+                <!-- Título -->
+                <h1 class="text-2xl font-bold">Gestión de Productos</h1>
+            </div>
+        </div>
+
+        <!-- Botón para agregar producto -->
+        <div class="flex justify-end mb-4">
+            <button id="addProductBtn" class="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Agregar Producto
+            </button>
+        </div>
+
+        <!-- Tabla de productos -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 text-left">Nombre</th>
+                        <th class="py-2 px-4 text-left">Precio</th>
+                        <th class="py-2 px-4 text-left">Stock</th>
+                        <th class="py-2 px-4 text-left">Categoria</th>
+                        <th class="py-2 px-4 text-center">
+                            Imagen
+                        </th>
+                        <th class="py-2 px-4 text-left">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <!-- Recorremos los productos con EJS -->
+                    <% products.forEach(function(product) { %>
+                        <tr>
+                            <td class="py-2 px-4 border border-gray-300">
+                                <%= product.name %>
+                            </td>
+                            <td class="py-2 px-4 border border-gray-300">$<%= product.price %>
+                            </td>
+                            <td class="py-2 px-4 border border-gray-300">
+                                <%= product.stock %>
+                            </td>
+                            <td class="py-2 px-4 border border-gray-300">
+                                <%= product.category ? product.category.name : 'Sin categoría' %>
+                            </td>
+                            <td class="py-2 px-4 border border-gray-300">
+                                <img src="/uploads/<%= product.imagen1 %>" alt="<%= product.name %>"
+                                    class="h-10 w-10 object-cover" width="80" height="80">
+                            </td>
+                            <td class="space-x-2 text-center">
+                                <!-- Botón de ver detalles -->
+                                <button class="bg-blue-500 text-white p-2 rounded"
+                                    onclick="viewProduct('<%= product.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z">
+                                        </path>
+                                    </svg>
+                                </button>
+
+                                <!-- Botón de editar -->
+                                <button class="bg-yellow-500 text-white p-2 rounded"
+                                    onclick="editProduct('<%= product.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5h4l2 2 5 5v7h-4l-6-6V9H5V5h6z"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Botón de eliminar -->
+                                <button class="bg-red-500 text-white p-2 rounded"
+                                    onclick="deleteProduct('<%= product.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 7h16M10 11v6m4-6v6m5 7H5a2 2 0 01-2-2V7h18v12a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Función para agregar producto
+        document.getElementById('addProductBtn').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Agregar Producto',
+                html: `
+                    <input id="productName" class="swal2-input" placeholder="Nombre del Producto">
+                    <input id="productPrice" class="swal2-input" placeholder="Precio">
+                    <input id="productStock" class="swal2-input" placeholder="Stock">
+                    <select id="categorySelect" class="swal2-select">
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.id %>"><%= category.name %></option>
+                        <% }) %>
+                    </select>
+                    <input type="file" id="image1" class="swal2-input" accept="image/*">
+                    <input type="file" id="image2" class="swal2-input" accept="image/*">
+                    <textarea id="productDescription" class="swal2-textarea" placeholder="Descripción"></textarea>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Agregar',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const name = document.getElementById('productName').value;
+                    const price = document.getElementById('productPrice').value;
+                    const stock = document.getElementById('productStock').value;
+                    const categoryId = document.getElementById('categorySelect').value;
+                    const image1 = document.getElementById('image1').files[0];
+                    const image2 = document.getElementById('image2').files[0];
+                    const description = document.getElementById('productDescription').value;
+                    if (!name || !price || !stock || !categoryId || !image1 || !description) {
+                        Swal.showValidationMessage('Por favor completa todos los campos');
+                        return false;
+                    }
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('price', price);
+                    formData.append('stock', stock);
+                    formData.append('categoryId', categoryId);
+                    if (image1) formData.append('image1', image1);
+                    if (image2) formData.append('image2', image2);
+                    formData.append('description', description);
+
+                    return formData;
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    fetch('/admin/productos', {
+                        method: 'POST',
+                        body: result.value
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                Swal.fire('Error', data.error, 'error');
+                            } else {
+                                Swal.fire('Éxito', 'Producto agregado exitosamente', 'success').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire('Error', 'No se pudo agregar el producto', 'error');
+                        });
+                }
+            });
+        });
+        // Función para ver producto
+        function viewProduct(id) {
+            fetch(`/admin/productos/${id}`)
+                .then(response => response.json())
+                .then(product => {
+                    Swal.fire({
+                        title: 'Detalles del Producto',
+                        html: `
+                            <p><strong>Nombre:</strong> ${product.name}</p>
+                            <p><strong>Precio:</strong> $${product.price}</p>
+                            <p><strong>Stock:</strong> ${product.stock}</p>
+                            <p><strong>Categoría:</strong> ${product.category.name}</p>
+                            <p><strong>Descripción:</strong> ${product.description}</p>
+                        `,
+                        showCloseButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar el producto', 'error');
+                });
+        };
+
+        // Función para editar producto
+        function editProduct(id) {
+            fetch(`/admin/productos/${id}`)
+                .then(response => response.json())
+                .then(product => {
+                    console.log(product);
+                    Swal.fire({
+                        title: 'Editar Producto',
+                        html: `
+                            <input  id="productName" class="swal2-input" value="${product.name}" placeholder="Nombre">
+                            <input  id="productPrice" class="swal2-input" value="${product.price}" placeholder="Precio">
+                            <input  id="productStock" class="swal2-input" value="${product.stock}" placeholder="Stock">
+                            <select id="categorySelect" class="swal2-select">
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category.id %>"><%= category.name %></option>
+                                <% }) %>
+                            </select> 
+                            <textarea id="productDescription" class="swal2-textarea" placeholder="Descripción">${product.description}</textarea>
+                        `,
+                        confirmButtonText: 'Actualizar',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+
+                        preConfirm: () => {
+                            const name = document.getElementById('productName').value;
+                            const price = document.getElementById('productPrice').value;
+                            const stock = document.getElementById('productStock').value;
+                            const category = document.getElementById('productCategory').value;
+                            const description = document.getElementById('productDescription').value;
+
+                            if (!name || !price || !stock || !category) {
+                                Swal.showValidationMessage('Por favor completa todos los campos requeridos');
+                            }
+
+                            return { name, price, stock, category, description };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const formData = new FormData();
+                            formData.append('name', result.value.name);
+                            formData.append('price', result.value.price);
+                            formData.append('stock', result.value.stock);
+                            formData.append('category', result.value.category);
+                            formData.append('description', result.value.description);
+
+                            fetch(`admin/productos/${id}`, {
+                                method: 'PUT', // Asegurarse de usar el método PUT
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(result.value)
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.error) {
+                                        Swal.fire('Error', data.error, 'error');
+                                    } else {
+                                        Swal.fire('Éxito', 'Producto actualizado exitosamente', 'success').then(() => {
+                                            location.reload();
+                                        });
+                                    }
+                                })
+                                .catch(err => {
+                                    Swal.fire('Error', 'No se pudo actualizar el producto', 'error');
+                                });
+                        }
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar el producto', 'error');
+                });
+        }
+
+        // Función para eliminar producto
+        function deleteProduct(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/productos/${id}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                Swal.fire('Error', data.error, 'error');
+                            } else {
+                                Swal.fire('Éxito', 'Producto eliminado exitosamente', 'success').then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire('Error', 'No se pudo eliminar el producto', 'error');
+                        });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

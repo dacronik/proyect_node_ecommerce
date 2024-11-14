@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Contenedor principal -->
+    
+    <div class="container mx-auto mt-10">
+        <div class="container mx-auto mt-10 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- Botón Volver -->
+                <a href="/admin" class="flex items-center space-x-1 bg-purple-600 text-gray-200 hover:bg-purple-800 hover:text-white transition-colors duration-200 rounded-lg px-3 py-2">
+                    <!-- Icono de Casa -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 1.707a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h3a1 1 0 001-1v-4h2v4a1 1 0 001 1h3a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    <span>Volver</span>
+                </a>
+                <!-- Título -->
+                <h1 class="text-2xl font-bold">Gestión de Usuarios</h1>
+            </div>
+        </div>
+    
+        <!-- Botón para agregar categorias -->
+        <section class="flex justify-end mb-4">
+            <button id="addUserBtn" class="bg-green-500 text-white px-4 py-2 rounded flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Agregar Usuario
+            </button>
+        </section>
+    
+        <!-- section tabla de Categorias -->
+        <section class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4 text-left">Nombre</th>
+                        <th class="py-2 px-4 text-left">Apellido</th>
+                        <th class="py-2 px-4 text-left">Correo</th>
+                        <th class="py-2 px-4 text-left">Perfil</th>
+                        <th class="py-2 px-4 text-left">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Carga de categorías en la tabla -->
+                    <% users.forEach((user) =>{ %>
+                        <tr>
+                            <td class="py-2 px4 border border-gray-300">
+                                <%= user.name %>
+                            </td>
+                            <td class="py-2 px4 border border-gray-300">
+                                <%= user.lastName %>
+                            </td>
+                            <td class="py-2 px-4"><%= user.email %></td>
+                            <td class="py-2 px-4"><%= user.role %></td>
+                            <td class="py-2 px-4 flex space-x-2">
+                                <!-- Botón de ver detalles -->
+                                <button class="bg-blue-500 text-white p-2 rounded" onclick="viewUsers('<%= user.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z"></path></svg>
+                                </button>
+    
+                                <!-- Botón de editar -->
+                                <button class="bg-yellow-500 text-white p-2 rounded" onclick="editUsers('<%= user.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5h4l2 2 5 5v7h-4l-6-6V9H5V5h6z"></path></svg>
+                                </button>
+    
+                                <!-- Botón de eliminar -->
+                                <button class="bg-red-500 text-white p-2 rounded" onclick="deleteUsers('<%= user.id %>')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M10 11v6m4-6v6m5 7H5a2 2 0 01-2-2V7h18v12a2 2 0 01-2 2z"></path></svg>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+           // Función para agregar un usuario
+        document.getElementById('addUserBtn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Registrar Nuevo Usuario',
+                html: `
+                    <input id="userName" class="swal2-input" placeholder="Nombre">
+                    <input id="lastName" class="swal2-input" placeholder="Apellido">
+                    <input id="email" class="swal2-input" placeholder="Correo" type="email">
+                    <input id="password" class="swal2-input" placeholder="Contraseña" type="password">
+                    <input id="confirmPassword" class="swal2-input" placeholder="Confirmar Contraseña" type="password">
+                    <select id="userRole" class="swal2-select">
+                        <option value="admin">
+                            Administrador
+                        </option>
+                        <option value="collaborator">
+                            Colaborador
+                        </option>
+                        <option value="client">
+                            Cliente
+                        </option>                       
+                    </select>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Registrar',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const name = document.getElementById('userName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const role = document.getElementById('userRole').value;
+    
+                    if (!name || !lastName || !email || !password || !confirmPassword || !role) {
+                        Swal.showValidationMessage('Por favor, complete todos los campos.');
+                        return false;
+                    }
+    
+                    if (password !== confirmPassword) {
+                        Swal.showValidationMessage('Las contraseñas no coinciden.');
+                        return false;
+                    }
+                    console.log(role)
+                    return { name:name, lastName:lastName, email:email, password:password, role:role };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/admin/usuarios', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(result.value)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            Swal.fire('Error', data.error, 'error');
+                        } else {
+                            Swal.fire('Éxito', 'Usuario registrado exitosamente', 'success').then(() => {
+                                location.reload();
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire('Error', 'No se pudo registrar el usuario', 'error');
+                    });
+                }
+            });
+        });
+
+        // Función para ver un usuario
+        function viewUsers(id) {
+            fetch(`/admin/usuarios/${id}`)
+                .then(response => response.json())
+                .then(user => {
+                    Swal.fire({
+                        title: 'Detalles del Usuario',
+                        html: `
+                            <p><strong>Nombre:</strong> ${user.name}</p>
+                            <p><strong>Apellido:</strong> ${user.lastName}</p>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <p><strong>Perfil:</strong> ${user.role}</p>
+                        `,
+                        showCloseButton: true,
+                        confirmButtonText: 'Cerrar'
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar el Usuario', 'error');
+                });
+        };
+
+        // Función para editar un usuario
+        function editUsers(id) {
+            fetch(`/admin/usuarios/${id}`)
+                .then(response => response.json())
+                .then(user => {
+                    Swal.fire({
+                        title: 'Editar Usuario',
+                        html: `
+                            <input  id="userName" class="swal2-input" value="${user.name}" placeholder="Nombre">
+                            <input  id="lastName" class="swal2-input" value="${user.lastName}" placeholder="Precio">
+                            <input  id="email" class="swal2-input" value="${user.email}" placeholder="Stock">
+                        `,
+                        confirmButtonText: 'Actualizar',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        
+                        preConfirm: () => {
+                            const name = document.getElementById('userName').value;
+                            const lastName = document.getElementById('lastName').value;
+                            const email = document.getElementById('email').value;
+
+                            if (!name || !lastName || !email) {
+                                Swal.showValidationMessage('Por favor completa todos los campos requeridos');
+                            }
+
+                            return { name, lastName, email };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const formData = new FormData();
+                            formData.append('name', result.value.name);
+                            formData.append('lastName', result.value.lastName);
+                            formData.append('email', result.value.email);
+
+                            fetch(`/admin/usuarios/${id}`, {
+                                method: 'PUT', 
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(result.value)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    Swal.fire('Error', data.error, 'error');
+                                } else {
+                                    Swal.fire('Éxito', 'Usuario actualizado exitosamente', 'success').then(() => {
+                                        location.reload();
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                Swal.fire('Error', 'No se pudo actualizar el usuario', 'error');
+                            });
+                        }
+                    });
+                })
+                .catch(err => {
+                    Swal.fire('Error', 'No se pudo cargar el usuario', 'error');
+                });
+        }
+        
+        // Función para eliminar un usuario
+        function deleteUsers(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/usuarios/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            Swal.fire('Error', data.error, 'error');
+                        } else {
+                            Swal.fire('Éxito', 'Usuario eliminado exitosamente', 'success').then(() => {
+                                location.reload();
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error', 'No se pudo eliminar el Usuario', 'error');
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
