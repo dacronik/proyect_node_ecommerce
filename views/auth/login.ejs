@@ -4,61 +4,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/css/styles.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tailwind.css">
-  <title>Login</title>
+  <title>Login - dev-toys</title>
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background-image: url('img/mortal-kombat.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .glow {
+      text-shadow: 0 0 5px #ff6f61, 0 0 10px #ff6f61, 0 0 20px #ff6f61, 0 0 40px #ff6f61;
+    }
+  </style>
 </head>
 
-<body>
-  <!-- component -->
-  <div class="bg-sky-100 flex justify-center items-center h-screen">
-    <!-- Left: Image -->
-    <div class="w-1/2 h-screen hidden lg:block">
-      <img src="https://img.freepik.com/fotos-premium/imagen-fondo_910766-187.jpg?w=826" alt="Placeholder Image"
-        class="object-cover w-full h-full">
-    </div>
+<body class="flex justify-center items-center min-h-screen">
+  <!-- Wrapper -->
+  <div class="flex flex-col lg:flex-row justify-center w-full lg:w-3/4 xl:w-1/2 shadow-lg rounded-lg overflow-hidden">
+    <!-- Left: Background Image -->
+    <!-- <div class="hidden lg:block lg:w-1/2 bg-cover bg-center" style="background-image: url('https://img.freepik.com/fotos-premium/imagen-fondo_910766-187.jpg?w=826');"></div> -->
     <!-- Right: Login Form -->
-    <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-      <h1 class="text-2xl font-semibold mb-4">Login</h1>
+    <div class="w-full p-8 lg:w-1/2 bg-gray-800">
+      <h1 class="text-3xl text-neon-green mb-6 glow">Login</h1>
 
+      <!-- Error Message -->
       <% if (error) { %>
-        <div class="bg-red-500 text-white p-4 rounded mb-4">
-          <%= error %> 
+        <div class="bg-red-600 text-white p-3 rounded mb-4 text-center">
+          <%= error %>
         </div>
       <% } %>
-      
 
       <form action="/login" method="POST">
         <!-- Username Input -->
-        <div class="mb-4 bg-sky-100">
-          <label for="correo" class="block text-gray-600">Correo</label>
-          <input type="email" id="email" name="email"
-            class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            autocomplete="off">
+        <div class="mb-6">
+          <label for="correo" class="block text-gray-300 mb-2">Correo</label>
+          <input type="email" id="email" name="email" class="w-full bg-gray-700 border border-gray-600 rounded-md py-3 px-4 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400" placeholder="ejemplo@correo.com">
         </div>
+
         <!-- Password Input -->
-        <div class="mb-4">
-          <label for="password" class="block text-gray-800">Contraseña</label>
-          <input type="password" id="password" name="password"
-            class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-            autocomplete="off">
+        <div class="mb-6">
+          <label for="password" class="block text-gray-300 mb-2">Contraseña</label>
+          <input type="password" id="password" name="password" class="w-full bg-gray-700 border border-gray-600 rounded-md py-3 px-4 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400" placeholder="••••••••">
         </div>
+
         <!-- Remember Me Checkbox -->
-        <div class="mb-4 flex items-center">
-          <input type="checkbox" id="remember" name="remember" class="text-red-500">
-          <label for="remember" class="text-green-900 ml-2">Recuerdame</label>
+        <div class="flex items-center mb-6">
+          <input type="checkbox" id="remember" name="remember" class="form-checkbox h-4 w-4 text-green-500 transition duration-150 ease-in-out">
+          <label for="remember" class="ml-2 text-gray-300">Recuérdame</label>
         </div>
+
         <!-- Forgot Password Link -->
-        <div class="mb-6 text-blue-500">
-          <a href="#" class="hover:underline">¿Has olvidado tu contraseña?</a>
+        <div class="mb-6">
+          <a href="#" class="text-sm text-green-400 hover:underline">¿Olvidaste tu contraseña?</a>
         </div>
+
         <!-- Login Button -->
-        <button type="submit"
-          class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
+        <button type="submit" class="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-blue-500 hover:to-green-400 text-white py-3 px-6 rounded-md text-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+          Login
+        </button>
       </form>
-      <!-- Sign up  Link -->
-      <div class="mt-6 text-green-500 text-center">
-        <a href="/registro" class="hover:underline">Registrate</a>
+
+      <!-- Sign Up Link -->
+      <div class="mt-8 text-center">
+        <a href="/registro" class="text-green-400 hover:underline">¿No tienes cuenta? Regístrate</a>
       </div>
     </div>
   </div>

@@ -8,5 +8,8 @@ router.get('/', ViewsController.renderHomePage);
 // Ruta de productos
 router.get('/productos', ViewsController.renderProductPage);
 
+// Ruta productos por ID 
+router.get('/productos/detalles/:id', ViewsController.renderProductDetails);
+
 
 module.exports = router;

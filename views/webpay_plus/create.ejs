@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpay - Crear Transacción</title>
+</head>
+<body>
+    <h1>Redirigiendo a Webpay...</h1>
+    <form action="<%= url %>" method="POST" id="webpay-form">
+        <input type="hidden" name="token_ws" value="<%= token %>">
+        <button type="submit">Continuar a Webpay</button>
+    </form>
+    <script>
+        // Redirige automáticamente el formulario
+        document.getElementById('webpay-form').submit();
+    </script>
+</body>
+</html>

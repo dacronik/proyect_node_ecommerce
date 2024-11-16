@@ -11,7 +11,10 @@ const productsRoutes = require('./routes/productsRoutes');
 const path = require('path');
 
 const viewRoutes = require('./routes/viewsRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const { getTotalQuantity } = require('./utils/cartUtils');
 
+const webpayRoutes = require('./routes/webpayRoutes');
 
 const app = express();
 
@@ -36,12 +39,19 @@ sequelize.sync().then(() => {
 
 // Middlewares
 app.use(express.json());
+// Middleware para agregar el totalQuantity globalmente
+app.use((req, res, next) => {
+    const cart = req.session.cart || [];
+    res.locals.totalQuantity = getTotalQuantity(cart);  // Lo hacemos global
+    next();
+})
 
 
 // Rutas Principales 
 // app.get('/', ViewsController.renderHomePage);
 app.use(viewRoutes)
 // Rutas de administración 
+app.use(cartRoutes)
 app.get('/admin', authorizeSession(['admin', 'collaborator']),(req, res) => {
     res.render('admin/admin');
 });
@@ -53,6 +63,8 @@ app.use('/admin/categorias',authorizeSession(['admin', 'collaborator']), categor
 
 app.use('/admin/productos', productsRoutes);
 
+//Rutas webpay
+app.use(webpayRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

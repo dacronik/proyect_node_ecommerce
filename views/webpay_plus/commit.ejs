@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpay - Confirmar Transacción</title>
+</head>
+<body>
+    <h1>Resultado de la Transacción</h1>
+    <p><strong>Token:</strong> <%= token %></p>
+    <p><strong>Estado:</strong> <%= commitResponse.status %></p>
+    <p><strong>Orden de Compra:</strong> <%= commitResponse.buy_order %></p>
+    <p><strong>Monto:</strong> <%= commitResponse.amount %></p>
+    <p><strong>Fecha de Transacción:</strong> <%= commitResponse.transaction_date %></p>
+
+    <% if (commitResponse.status === 'AUTHORIZED') { %>
+        <p>¡Transacción exitosa!</p>
+    <% } else { %>
+        <p>La transacción no fue autorizada. Por favor, intenta nuevamente.</p>
+    <% } %>
+</body>
+</html>

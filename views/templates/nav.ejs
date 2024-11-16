@@ -10,6 +10,12 @@
             <li><a href="/productos" class="hover:text-yellow-300">Productos</a></li>
             <li><a href="/about" class="hover:text-yellow-300">Nosotros</a></li>
             <li><a href="/contact" class="hover:text-yellow-300">Contacto</a></li>
+            <li>
+                <a href="/carrito" class="relative flex items-center">
+                  <img src="/icons/cart.svg" alt="Carrito de Compras" class="w-10 h-10">
+                  <span id="cart-badge" class="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs px-1"><%= totalQuantity %></span>
+                </a>
+              </li>
         </ul>
 
         <div>

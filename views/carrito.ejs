@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<style>
+    body {
+        background-image: url('img/fondo.jpg');
+        background-position: center;
+        background-size: cover;
+        display: grid;
+        min-height: 100dvh;
+        grid-template-rows: auto 1fr auto;
+    };
+    
+</style>
+<body >
+        <%- include('navBar') %>
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-semibold text-center text-gray-900 mb-6">Tu Carrito de Compras</h1>
+    
+            <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-3 px-6 text-left text-sm font-medium text-gray-600">Imagen</th>
+                            <th class="py-3 px-6 text-left text-sm font-medium text-gray-600">Producto</th>
+                            <th class="py-3 px-6 text-left text-sm font-medium text-gray-600">Cantidad</th>
+                            <th class="py-3 px-6 text-left text-sm font-medium text-gray-600">Precio</th>
+                            <th class="py-3 px-6 text-left text-sm font-medium text-gray-600">Total</th>
+                            <th class="py-3 px-6 text-center text-sm font-medium text-gray-600">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% cart.forEach(item => { %>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="py-4 px-6 text-center">
+                                    <img src="/uploads/<%= item.image %>" alt="<%= item.name %>" class="w-20 h-20 object-cover rounded">
+                                </td>
+                                <td class="py-4 px-6 text-gray-800 font-medium"><%= item.name %></td>
+                                <td class="py-4 px-6">
+                                    <input type="number" name="quantity" value="<%= item.quantity %>" min="1" class="w-16 p-2 border rounded-md" data-product-id="<%= item.productId %>">
+                                </td>
+                                <td class="py-4 px-6 text-gray-600"><%= new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(item.price) %></td>
+                                <td class="py-4 px-6 text-gray-600"><%= new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(item.price * item.quantity) %></td>
+                                <td class="py-4 px-6 text-center">
+                                    <button class="text-red-600 hover:text-red-800 remove-from-cart-btn" data-product-id="<%= item.productId %>">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="mt-6 flex justify-between items-center">
+                <div class="text-xl font-semibold text-white">
+                    <span class="font-bold">Total:</span> 
+                    <span><%= new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)) %> Pesos</span>
+                </div>
+                    <button class="checkout-btn px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700" id="checkout-btn">
+                        Proceder al Checkout
+                    </button>
+                    <!-- <form action="/webpay_plus/create" method="POST">
+                        <button class="checkout-btn px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700" id="checkout-btn">
+                            Proceder al Checkout
+                        </button>
+                    </form> -->
+            </div>
+    
+            <!-- Botón para vaciar el carrito -->
+            <div class="mt-4 text-center">
+                <button class="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 empty-cart-btn">
+                    Vaciar Carrito
+                </button>
+            </div>
+        </div>
+        <%- include('footer') %>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('checkout-btn').addEventListener('click', async () =>{
+            try {
+                const response = await fetch('/carrito/datos');
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log("Datos de la sesión:", data.session);
+                    console.log("Productos en el carrito:", data.cartProducts);
+                    console.log("Total de productos:",data.totalQuantity);
+                    console.log("Total del carrito:", data.totalPrice);
+                } else {
+                    console.error("Error al obtener los datos del carrito");
+                }
+            } catch(error){
+                console.error("Error al hacer la solicitud:", error);
+            }
+        })
+
+        // Función para actualizar el badge del carrito en el frontend
+        function updateCartBadge() {
+        fetch('/carrito/total-quantity')  // Ruta para obtener el número total de productos en el carrito
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.querySelector('.badge');
+                badge.textContent = data.totalQuantity; // Actualiza el badge con la cantidad total
+            })
+            .catch(error => console.error('Error al actualizar el badge del carrito:', error));
+        }
+        // Agregar los event listeners para eliminar del carrito
+        document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const productId = button.getAttribute('data-product-id');
+                
+                try {
+                    const response = await fetch('/carrito/remove', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ productId }),
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: '¡Producto eliminado!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                        window.location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar del carrito:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al eliminar el producto del carrito.',
+                    });
+                }
+            });
+        });
+
+        // Agregar los event listeners para actualizar cantidades
+        document.querySelectorAll('input[name="quantity"]').forEach(input => {
+            input.addEventListener('change', async (e) => {
+                const productId = e.target.getAttribute('data-product-id');
+                let quantity = parseInt(e.target.value);
+
+                // Validación para asegurarnos de que la cantidad sea al menos 1
+                if (quantity < 1) {
+                    await Swal.fire({
+                        icon: 'warning',
+                        title: 'Cantidad no válida',
+                        text: 'La cantidad debe ser al menos 1.',
+                    });
+                    e.target.value = 1;
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/carrito/update', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ productId, quantity }),
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Cantidad actualizada',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                        window.location.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al actualizar la cantidad:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al actualizar el carrito.',
+                    });
+                }
+            });
+        });
+
+        // Agregar el event listener para vaciar el carrito
+        document.querySelector('.empty-cart-btn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/carrito/empty', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId: 'all' }), // Asumimos que este identificador vacía todo el carrito
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Carrito vaciado',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                    window.location.reload();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                    });
+                }
+            } catch (error) {
+                console.error('Error al vaciar el carrito:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al vaciar el carrito.',
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -36,8 +36,7 @@ const ProductController = {
     },
     createProduct: async (req, res) => {
         try {
-            console.log('Cuerpo de la solicitud:', req.body);
-            console.log('Archivos recibidos:', req.files);
+            
             const { name, price, stock, categoryId,description } =req.body
 
             const category = await CategoryService.getCategoryById(categoryId);
