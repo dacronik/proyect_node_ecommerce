@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const webpayController = require('../controllers/webpay_plus')
 
+router.get('/webpay_plus/create', webpayController.showCreate)
 // Ruta para la transacción 
 router.post('/webpay_plus/create', webpayController.create);
 

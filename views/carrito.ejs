@@ -63,14 +63,14 @@
                     <span class="font-bold">Total:</span> 
                     <span><%= new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)) %> Pesos</span>
                 </div>
-                    <button class="checkout-btn px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700" id="checkout-btn">
-                        Proceder al Checkout
+                <form action="/webpay_plus/create" method="POST" class="text-center">
+                    <button type="submit" class="px-6 py-2 bg-pink-600 hover:bg-blue-700 text-white font-bold rounded-md w-full mt-4">
+                        Pagar con Webpay
                     </button>
-                    <!-- <form action="/webpay_plus/create" method="POST">
-                        <button class="checkout-btn px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700" id="checkout-btn">
-                            Proceder al Checkout
-                        </button>
-                    </form> -->
+                </form>
+                <!-- <button type="submit" class="px-6 py-2 bg-pink-600 hover:bg-blue-700 text-white font-bold rounded-md w-full mt-4" id="checkout-btn">
+                    Pagar con Webpay
+                </button> -->
             </div>
     
             <!-- Botón para vaciar el carrito -->

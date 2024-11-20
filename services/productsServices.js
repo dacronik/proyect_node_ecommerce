@@ -102,6 +102,23 @@ const ProductService = {
         } catch (error) {
             throw new Error(`Error al eliminar el producto: ${error.message}`);
         }
+    },
+    updateProductStock: async (id, quantity) => {
+        try {
+            const product = await Product.findByPk(id);
+            if (!product) {
+                throw new Error('Producto no encontrado');
+            }
+            if (product.stock < quantity) {
+                throw new Error('Stock insuficiente para completar la compra');
+            }
+            // Restar el stock
+            product.stock -= quantity;
+            await product.save();
+            return product;
+        } catch (error) {
+            throw new Error(`Error al actualizar el stock del producto: ${error.message}`);
+        }
     }
 };
 
