@@ -1,6 +1,7 @@
 const { WebpayPlus } = require('transbank-sdk');
 const asyncHandler = require('../utils/asyncHandler');
-const ProductService = require('../services/productsServices')
+const ProductService = require('../services/productsServices');
+const { sendTransactionEmail} = require('../services/emailService')
 const crypto = require('crypto');
 
 // Muestra la vista de confirmación antes de crear la transacción
@@ -59,7 +60,16 @@ exports.commit = asyncHandler(async (req, res) => {
     const commitResponse = await new WebpayPlus.Transaction().commit(token);
 
     if (commitResponse.status === 'AUTHORIZED') {
+        const user = req.session.user;
         const cart = req.session.cart;
+        const totalAmount = req.session.totalAmount || 0;
+
+        //Enviar email
+        await sendTransactionEmail(user.email,{
+            buyOrder: req.session.buyOrder,
+            totalAmount,
+            cart
+        })
 
         
         if (cart && Array.isArray(cart) && cart.length > 0) {

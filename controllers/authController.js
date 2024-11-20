@@ -1,4 +1,5 @@
 const userService = require("../services/userServices");
+const { uuid } = require('uuidv4')
 
 const authController = {
     registerUser: async (req, res) => {
@@ -51,7 +52,9 @@ const authController = {
         req.session.destroy();
         res.clearCookie('token');
         res.redirect('/login');
-    }
+    },
+
+    
 };
 
 module.exports = authController;

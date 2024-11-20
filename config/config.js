@@ -38,5 +38,9 @@ module.exports = {
       maxAge: 3600000 * 2 // 2 horas 
     },
     
+  },
+  emailKey:{
+    user: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD
   }
 };

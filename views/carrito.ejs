@@ -63,8 +63,9 @@
                     <span class="font-bold">Total:</span> 
                     <span><%= new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)) %> Pesos</span>
                 </div>
+                <!-- Botón para pagar con Webpay -->
                 <form action="/webpay_plus/create" method="POST" class="text-center">
-                    <button type="submit" class="px-6 py-2 bg-pink-600 hover:bg-blue-700 text-white font-bold rounded-md w-full mt-4">
+                    <button type="submit" class="px-6 py-2 bg-pink-600 text-white font-bold rounded-md w-full mt-4">
                         Pagar con Webpay
                     </button>
                 </form>
@@ -85,23 +86,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.getElementById('checkout-btn').addEventListener('click', async () =>{
-            try {
-                const response = await fetch('/carrito/datos');
-                const data = await response.json();
-
-                if (response.ok) {
-                    console.log("Datos de la sesión:", data.session);
-                    console.log("Productos en el carrito:", data.cartProducts);
-                    console.log("Total de productos:",data.totalQuantity);
-                    console.log("Total del carrito:", data.totalPrice);
-                } else {
-                    console.error("Error al obtener los datos del carrito");
-                }
-            } catch(error){
-                console.error("Error al hacer la solicitud:", error);
-            }
-        })
+       
+        
 
         // Función para actualizar el badge del carrito en el frontend
         function updateCartBadge() {
@@ -154,6 +140,7 @@
                     });
                 }
             });
+            
         });
 
         // Agregar los event listeners para actualizar cantidades
@@ -208,6 +195,7 @@
                     });
                 }
             });
+            
         });
 
         // Agregar el event listener para vaciar el carrito
@@ -218,7 +206,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ productId: 'all' }), // Asumimos que este identificador vacía todo el carrito
+                    body: JSON.stringify({ productId: 'all' }),
                 });
 
                 const data = await response.json();
