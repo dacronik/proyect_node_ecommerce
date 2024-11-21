@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/tailwind.css">
+</head>
+<body>
+    <nav class="bg-gradient-to-r from-indigo-700 via-blue-600 to-indigo-700 p-6 text-white shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo y Título -->
+            <div class="flex items-center space-x-4">
+                <img src="img/logo.png" alt="Logo Dev-Toys" width="80" height="80" class="rounded-full border-4 border-yellow-500"/>
+                <a href="/" class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-red-500 hover:text-yellow-300">Dev-Toys</a>
+            </div>
+    
+            <!-- Menú de Navegación -->
+            <ul class="flex space-x-8 font-semibold">
+                <li><a href="/" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P] hover:scale-105 hover:drop-shadow-[0_0_8px_#FF00FF]">Inicio</a></li>
+                <li><a href="/productos" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P] hover:scale-105 hover:drop-shadow-[0_0_8px_#00FF00]">Productos</a></li>
+                <li><a href="/about" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P] hover:scale-105 hover:drop-shadow-[0_0_8px_#00FFFF]">Nosotros</a></li>
+                <li><a href="/contact" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P] hover:scale-105 hover:drop-shadow-[0_0_8px_#FF00FF]">Contacto</a></li>
+                
+                <!-- Carrito de Compras -->
+                <li>
+                    <a href="/carrito" class="relative flex items-center">
+                        <img src="/icons/cart.svg" alt="Carrito de Compras" class="w-10 h-10 transform hover:scale-110 transition duration-200"/>
+                        <span id="cart-badge" class="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs px-2 py-1 font-bold">
+                            <%= totalQuantity %>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+    
+            <!-- Botones de Login y Registro -->
+            <div class="flex items-center space-x-4">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <span class="mr-4 text-lg font-semibold">Bienvenido, <%= user.name %> <%= user.lastName %></span>
+                    <a href="/logout" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-500 text-white py-2 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+                        Cerrar sesión
+                    </a>
+                <% } else { %>
+                    <a href="/login" class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-500 text-white py-2 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+                        Login
+                    </a>
+                    <a href="/registro" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-white py-2 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+                        Register
+                    </a>
+                <% } %>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden hidden flex-col items-center space-y-4 p-4 bg-gradient-to-r from-indigo-700 via-blue-600 to-indigo-700">
+            <ul class="space-y-4 text-center">
+                <li><a href="/" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P]">Inicio</a></li>
+                <li><a href="/productos" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P]">Productos</a></li>
+                <li><a href="/about" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P]">Nosotros</a></li>
+                <li><a href="/contact" class="hover:text-yellow-300 transition duration-300 text-2xl font-[PressStart2P]">Contacto</a></li>
+                <li>
+                    <a href="/carrito" class="relative flex items-center">
+                        <img src="/icons/cart.svg" alt="Carrito de Compras" class="w-10 h-10 transform hover:scale-110 transition duration-200"/>
+                        <span id="cart-badge" class="absolute top-0 right-0 bg-red-600 text-white rounded-full text-xs px-2 py-1 font-bold">
+                            <%= totalQuantity %>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        // Función para mostrar/ocultar el menú de hamburguesa
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

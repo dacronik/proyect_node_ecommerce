@@ -51,7 +51,7 @@ const sendTransactionEmail = async (userEmail, transactionData) => {
 
     // Configuración del email
     const mailOptions = {
-        from: '"Nuestra Juguetería" <dacronik@gmail.com>', // Remitente
+        from: '"Dev-Toys" <dacronik@gmail.com>', // Remitente
         to: userEmail, // Destinatario
         subject: "Detalles de tu compra",
         html: emailHTML, // Cuerpo del email en HTML
